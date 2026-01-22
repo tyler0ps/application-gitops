@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: demo-apps
+
+resources:
+  - ../../base
+
+commonLabels:
+  environment: experiment
+  managed-by: argocd
+
+commonAnnotations:
+  deployment-type: "experiment"
+  gitops-managed: "true"
+
+# Example of using Kustomize to modify images
+images:
+  - name: nginx
+    newTag: "1.26"  # Override base image tag
+
+# Apply strategic merge patches
+patchesStrategicMerge:
+  - patches.yaml

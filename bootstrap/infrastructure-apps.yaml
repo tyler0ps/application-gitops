@@ -1,0 +1,32 @@
+# ============================================================
+# INFRASTRUCTURE APP-OF-APPS
+# Manages infrastructure components
+# ============================================================
+
+# Commented out for simplicity - uncomment to enable nginx-ingress
+# ---
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: nginx-ingress
+#   namespace: argocd
+#   finalizers:
+#     - resources-finalizer.argocd.argoproj.io
+# spec:
+#   project: default
+#
+#   source:
+#     repoURL: git@github.com:tyler0ps/application-gitops.git
+#     targetRevision: main
+#     path: infrastructure/nginx-ingress
+#
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: ingress-nginx
+#
+#   syncPolicy:
+#     automated:
+#       prune: true
+#       selfHeal: true
+#     syncOptions:
+#       - CreateNamespace=true

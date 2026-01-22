@@ -1,0 +1,59 @@
+# ============================================================
+# SERVICES APP-OF-APPS
+# Manages application deployments
+# ============================================================
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: demo-nginx
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+
+  source:
+    repoURL: git@github.com:tyler0ps/application-gitops.git
+    targetRevision: main
+    path: services/demo-nginx/overlays/experiment
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: demo-apps
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: demo-redis
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+
+  source:
+    repoURL: git@github.com:tyler0ps/application-gitops.git
+    targetRevision: main
+    path: services/demo-redis
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: demo-apps
+
+  syncPolicy:
+    # Manual sync - demonstrates manual approval workflow
+    automated:
+      prune: false
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=true
